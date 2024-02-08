@@ -1,0 +1,31 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  name: k8s-version-distribution-check.soumik.dev.1.0.0
+  annotations:
+    kapp.k14s.io/change-group: "pkg"
+spec:
+  refName: k8s-version-distribution-check.soumik.dev
+  version: 1.0.0
+  template:
+    spec:
+      fetch:
+      - imgpkgBundle:
+          image: index.docker.io/100mik/kc-k8s-version-distribution-check@sha256:d003f487e6de19dc58d27533e1bf086c120b024df5db45d7791b10a7935f0caa
+      template:
+      - ytt:
+          paths:
+          - config
+          valuesFrom:
+          - downwardAPI:
+              items:
+              - name: kubernetes_version
+                kubernetesVersion: {}
+              - name: group_versions
+                kubernetesAPIs: {}
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+      deploy:
+      - kapp: {}

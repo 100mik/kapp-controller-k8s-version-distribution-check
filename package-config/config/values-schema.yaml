@@ -1,0 +1,4 @@
+#@data/values-schema
+---
+kubernetes_version: ""
+group_versions: [""]

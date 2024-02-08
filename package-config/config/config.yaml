@@ -1,0 +1,20 @@
+#@ load("@ytt:data", "data")
+
+#@ def isOpenshift(groupversions):
+#@   for gv in groupversions:
+#@     if gv.find("route.openshift.io") != -1:
+#@       return "true"
+#@     end
+#@   end
+#@  return "false"
+#@ end
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k8s-cluster-info
+  namespace: default
+data:
+  kubernetes_version: #@ data.values.kubernetes_version
+  is_openshift: #@ isOpenshift(data.values.group_versions)
